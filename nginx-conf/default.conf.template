@@ -1,0 +1,57 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+
+    location / {
+        proxy_pass          http://graph_query_node:8000;
+        proxy_buffering     off;
+        proxy_max_temp_file_size 0;
+        proxy_redirect      off;
+        proxy_set_header    Host $host;
+        proxy_set_header    X-Real-IP $remote_addr;
+    }
+
+    location ^~ /ws {
+        rewrite             "^/ws(/.*)$" $1 break;
+    	proxy_pass          http://graph_query_node:8001;
+        proxy_redirect      off;
+        proxy_set_header    Upgrade $http_upgrade;
+        proxy_set_header    Connection "upgrade";
+        proxy_set_header    Host $host;
+        proxy_set_header    X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_http_version  1.1;
+    }
+
+    location ^~ /deploy {
+        if ($http_authorization != "Bearer ${AUTH_TOKEN}") {
+            return 401;
+        }
+        rewrite             "^/deploy(/.*)$" $1 break;
+        proxy_pass          http://graph_indexed_node_common:8020;
+        proxy_buffering     off;
+        proxy_max_temp_file_size 0;
+        proxy_redirect      off;
+        proxy_set_header    Host $host;
+        proxy_set_header    X-Real-IP $remote_addr;
+    }
+
+    location ^~ /ipfs {
+        rewrite             "^/ipfs(/.*)$" $1 break;
+        proxy_pass          http://ipfs:5001;
+        proxy_buffering     off;
+        proxy_request_buffering off;
+        proxy_redirect      off;
+        proxy_set_header    Connection "";
+        proxy_set_header    Host $host;
+        proxy_set_header    X-Ipfs-Gateway-Prefix "";
+        proxy_http_version  1.1;
+        proxy_connect_timeout 600s;
+        proxy_send_timeout  600s;
+        proxy_read_timeout  600s;
+
+        client_max_body_size 50m;
+    }
+}
+

@@ -1,0 +1,129 @@
+version: "3.3"
+
+services:
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx-conf:/etc/nginx/templates
+      - ./nginx-logs:/var/log/nginx
+    ports:
+      - '80:80'
+    environment:
+      - AUTH_TOKEN=super-secret-bearer-token
+    networks:
+      - graph_net
+    depends_on:
+      - graph_query_node
+      - graph_indexed_node_common
+      - ipfs
+
+  graph_query_node:
+    image: sergeyitsib/graph-node
+    ports:
+      - '127.0.0.1:8000:8000'
+      - '127.0.0.1:8001:8001'
+#      - '127.0.0.1:8020:8020'
+#      - '127.0.0.1:8030:8030'
+#      - '127.0.0.1:8040:8040'
+    depends_on:
+      - ipfs
+      - postgres
+    environment:
+      node_id: graph_query_node
+      node_role: query-node
+      postgres_host: postgres
+      postgres_user: graph-node
+      postgres_pass: let_me_in
+      postgres_db: graph-node
+      ipfs: 'ipfs:5001'
+      RUST_LOG: info
+      GRAPH_LOG: info
+      GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
+    volumes:
+      - ./nodes-conf:/var/lib/graph-node
+    networks:
+      - graph_net
+
+  graph_indexed_node_common:
+    image: sergeyitsib/graph-node
+    ports:
+#      - '127.0.0.1:8100:8000'
+#      - '127.0.0.1:8101:8001'
+      - '127.0.0.1:8120:8020'
+#      - '127.0.0.1:8130:8030'
+#      - '127.0.0.1:8140:8040'
+    depends_on:
+      - ipfs
+      - postgres
+    environment:
+      node_id: graph_indexed_node_common
+      node_role: index-node
+      postgres_host: postgres
+      postgres_user: graph-node
+      postgres_pass: let_me_in
+      postgres_db: graph-node
+      ipfs: 'ipfs:5001'
+      GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
+      BLOCK_INGESTOR: graph_indexed_node_common
+    volumes:
+      - ./nodes-conf:/var/lib/graph-node
+    networks:
+      - graph_net
+
+  graph_indexed_node_mainnet:
+    image: sergeyitsib/graph-node
+#    ports:
+#      - '127.0.0.1:8200:8000'
+#      - '127.0.0.1:8201:8001'
+#      - '127.0.0.1:8220:8020'
+#      - '127.0.0.1:8230:8030'
+#      - '127.0.0.1:8240:8040'
+    depends_on:
+      - ipfs
+      - postgres
+    environment:
+      node_id: graph_indexed_node_mainnet
+      node_role: index-node
+      postgres_host: postgres
+      postgres_user: graph-node
+      postgres_pass: let_me_in
+      postgres_db: graph-node
+      ipfs: 'ipfs:5001'
+      GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
+    volumes:
+      - ./nodes-conf:/var/lib/graph-node
+    networks:
+      - graph_net
+
+  ipfs:
+    image: ipfs/go-ipfs:v0.4.23
+    ports:
+      - '127.0.0.1:5001:5001'
+    networks:
+      - graph_net
+    volumes:
+      - graph_ipfs:/data/ipfs
+
+  postgres:
+    image: postgres
+    ports:
+      - '127.0.0.1:5432:5432'
+    command: ["postgres", "-cshared_preload_libraries=pg_stat_statements"]
+    environment:
+      POSTGRES_USER: graph-node
+      POSTGRES_PASSWORD: let_me_in
+      POSTGRES_DB: graph-node
+    networks:
+      - graph_net
+    volumes:
+      - graph_postgres:/var/lib/postgresql/data
+
+
+volumes:
+  graph_postgres:
+  graph_ipfs:
+
+networks:
+  graph_net:
+    driver: bridge
