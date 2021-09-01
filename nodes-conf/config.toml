@@ -19,6 +19,12 @@ provider = [
     { label = "matic-0", url = "http://207.154.238.222:8545", features = ["archive", "traces"] }
 ]
 
+[chains.bsc]
+shard = "primary"
+provider = [
+    { label = "bsc-0", url = "http://167.99.253.210:8545", features = ["archive", "traces"] }
+]
+
 [general]
 query = "graph_query_node"
 
@@ -30,6 +36,10 @@ indexers = ["graph_indexed_node_mainnet"]
 [[deployment.rule]]
 match = { network = "matic" }
 indexers = ["graph_indexed_node_matic"]
+
+[[deployment.rule]]
+match = { network = "bsc" }
+indexers = ["graph_indexed_node_bsc"]
 
 [[deployment.rule]]
 indexers = ["graph_indexed_node_common"]

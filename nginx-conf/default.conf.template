@@ -13,6 +13,15 @@ server {
         proxy_set_header    X-Real-IP $remote_addr;
     }
 
+    location ^~ /graphql {
+        proxy_pass          http://graph_query_node:8030;
+        proxy_buffering     off;
+        proxy_max_temp_file_size 0;
+        proxy_redirect      off;
+        proxy_set_header    Host $host;
+        proxy_set_header    X-Real-IP $remote_addr;
+    }
+
     location ^~ /ws {
         rewrite             "^/ws(/.*)$" $1 break;
     	proxy_pass          http://graph_query_node:8001;

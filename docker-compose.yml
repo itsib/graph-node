@@ -24,7 +24,7 @@ services:
       - '127.0.0.1:8000:8000'
       - '127.0.0.1:8001:8001'
 #      - '127.0.0.1:8020:8020'
-#      - '127.0.0.1:8030:8030'
+      - '127.0.0.1:8030:8030'
 #      - '127.0.0.1:8040:8040'
     depends_on:
       - ipfs
@@ -97,6 +97,25 @@ services:
       - postgres
     environment:
       node_id: graph_indexed_node_matic
+      node_role: index-node
+      postgres_host: postgres
+      postgres_user: graph-node
+      postgres_pass: let_me_in
+      postgres_db: graph-node
+      ipfs: 'ipfs:5001'
+      GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
+    volumes:
+      - ./nodes-conf:/var/lib/graph-node
+    networks:
+      - graph_net
+
+  graph_indexed_node_bsc:
+    image: sergeyitsib/graph-node
+    depends_on:
+      - ipfs
+      - postgres
+    environment:
+      node_id: graph_indexed_node_bsc
       node_role: index-node
       postgres_host: postgres
       postgres_user: graph-node
