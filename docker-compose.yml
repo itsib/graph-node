@@ -8,7 +8,7 @@ services:
       - ./nginx-conf:/etc/nginx/templates
       - ./nginx-logs:/var/log/nginx
     ports:
-      - '80:80'
+      - '4000:80'
     environment:
       - AUTH_TOKEN=super-secret-bearer-token
     networks:
@@ -73,17 +73,30 @@ services:
 
   graph_indexed_node_mainnet:
     image: sergeyitsib/graph-node
-#    ports:
-#      - '127.0.0.1:8200:8000'
-#      - '127.0.0.1:8201:8001'
-#      - '127.0.0.1:8220:8020'
-#      - '127.0.0.1:8230:8030'
-#      - '127.0.0.1:8240:8040'
     depends_on:
       - ipfs
       - postgres
     environment:
       node_id: graph_indexed_node_mainnet
+      node_role: index-node
+      postgres_host: postgres
+      postgres_user: graph-node
+      postgres_pass: let_me_in
+      postgres_db: graph-node
+      ipfs: 'ipfs:5001'
+      GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
+    volumes:
+      - ./nodes-conf:/var/lib/graph-node
+    networks:
+      - graph_net
+
+  graph_indexed_node_matic:
+    image: sergeyitsib/graph-node
+    depends_on:
+      - ipfs
+      - postgres
+    environment:
+      node_id: graph_indexed_node_matic
       node_role: index-node
       postgres_host: postgres
       postgres_user: graph-node
@@ -118,7 +131,6 @@ services:
       - graph_net
     volumes:
       - graph_postgres:/var/lib/postgresql/data
-
 
 volumes:
   graph_postgres:
