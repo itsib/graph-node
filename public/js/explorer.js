@@ -212,6 +212,10 @@ function renderSubgraphs(fullSubgraphs) {
       </div>
       ` : ''}
       <div class="item">
+        <div class="label">Queries (HTTP):</div>
+        <div class="value">${location.origin}/subgraphs/name/${fullSubgraph.name}</div>
+      </div>
+      <div class="item">
         <div class="label">Subscriptions (WS):</div>
         <div class="value">${location.origin}/ws/subgraphs/name/${fullSubgraph.name}</div>
       </div>

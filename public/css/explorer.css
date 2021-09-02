@@ -64,6 +64,7 @@ h1 {
     -webkit-border-radius: 4px;
     -o-border-radius: 4px;
     -ms-border-radius: 4px;
+    overflow: hidden;
     display: block;
 }
 .subgraph-row .header {
