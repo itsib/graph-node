@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>Subgraph Explorer</title>
+
+  <link href="/css/explorer.css" rel="stylesheet"/>
+  <script src="/js/explorer.js"></script>
+</head>
+<body>
+
+<div id="container">
+  <h1>Subgraphs Explorer</h1>
+
+  <div class="error-block" id="error-block">
+    <div class="header">Error</div>
+    <div class="message" id="error-message"></div>
+  </div>
+
+  <div class="subgraphs-list">
+    <template id="subgraph-row-tmpl">
+      <div class="subgraph-row">
+        <div class="header">
+          <a class="name subgraph-name"></a>
+          <div class="chain">
+            <div class="chain-icon subgraph-chain-icon"></div>
+            <div class="chain-name subgraph-chain-name"></div>
+          </div>
+          <div class="status subgraph-status"></div>
+        </div>
+
+        <div class="progress">
+          <div class="progress-bar subgraph-progress"></div>
+        </div>
+
+        <div class="legend subgraph-legend">
+          <div class="item subgraph-start-block" title="Start block"></div>
+          <div class="spacer"></div>
+          <div class="item subgraph-current-block" title="Current process block"></div>
+          <div class="spacer"></div>
+          <div class="item subgraph-head-block" title="Chain head block"></div>
+        </div>
+
+        <div class="info subgraph-info"></div>
+      </div>
+    </template>
+  </div>
+</div>
+</body>
+</html>

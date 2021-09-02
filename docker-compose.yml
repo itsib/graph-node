@@ -14,18 +14,33 @@ services:
     networks:
       - graph_net
     depends_on:
+      - graph_explorer
       - graph_query_node
       - graph_indexed_node_common
       - ipfs
+
+  graph_explorer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '127.0.0.1:8080:8080'
+    depends_on:
+      - postgres
+    environment:
+      PG_HOST: postgres
+      PG_USER: graph-node
+      PG_PASSWORD: let_me_in
+      PG_DATABASE: graph-node
+    networks:
+      - graph_net
 
   graph_query_node:
     image: sergeyitsib/graph-node
     ports:
       - '127.0.0.1:8000:8000'
       - '127.0.0.1:8001:8001'
-#      - '127.0.0.1:8020:8020'
       - '127.0.0.1:8030:8030'
-#      - '127.0.0.1:8040:8040'
     depends_on:
       - ipfs
       - postgres
@@ -37,9 +52,8 @@ services:
       postgres_pass: let_me_in
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
-      RUST_LOG: info
-      GRAPH_LOG: info
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
+      BLOCK_INGESTOR: graph_indexed_node_common
     volumes:
       - ./nodes-conf:/var/lib/graph-node
     networks:
@@ -48,11 +62,7 @@ services:
   graph_indexed_node_common:
     image: sergeyitsib/graph-node
     ports:
-#      - '127.0.0.1:8100:8000'
-#      - '127.0.0.1:8101:8001'
       - '127.0.0.1:8120:8020'
-#      - '127.0.0.1:8130:8030'
-#      - '127.0.0.1:8140:8040'
     depends_on:
       - ipfs
       - postgres
@@ -66,6 +76,8 @@ services:
       ipfs: 'ipfs:5001'
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
       BLOCK_INGESTOR: graph_indexed_node_common
+#      RUST_LOG: info
+#      GRAPH_LOG: info
     volumes:
       - ./nodes-conf:/var/lib/graph-node
     networks:
@@ -85,6 +97,7 @@ services:
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
+      BLOCK_INGESTOR: graph_indexed_node_common
     volumes:
       - ./nodes-conf:/var/lib/graph-node
     networks:
@@ -104,6 +117,7 @@ services:
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
+      BLOCK_INGESTOR: graph_indexed_node_common
     volumes:
       - ./nodes-conf:/var/lib/graph-node
     networks:
@@ -123,6 +137,7 @@ services:
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
+      BLOCK_INGESTOR: graph_indexed_node_common
     volumes:
       - ./nodes-conf:/var/lib/graph-node
     networks:

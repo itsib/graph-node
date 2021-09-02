@@ -1,0 +1,15 @@
+# IDE files
+.vscode/
+.idea/
+
+.git/
+node_modules/
+nginx-conf/
+nginx-logs/
+nodes-conf/
+
+npm-debug.log
+Dockerfile
+docker-compose.yml
+.dockerignore
+README.md

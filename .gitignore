@@ -3,3 +3,4 @@
 .idea/
 
 nginx-logs/
+node_modules/

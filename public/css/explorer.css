@@ -1,0 +1,165 @@
+html, body {
+    --success: #2FCC66;
+    --error: #E74C3C;
+    --warning: #f1c40f;
+
+    --border-primary: #dee2e6;
+
+    --progress-bg: #e9ecef;
+    --bg-primary: #f6f7f9;
+
+    --text-primary: black;
+    --text-secondary: #949393;
+
+    margin: 0;
+    padding: 0;
+    color: var(--text-primary);
+    font-family: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+#container {
+    width: 90%;
+    max-width: 850px;
+    margin: 40px auto 70px;
+}
+
+h1 {
+    margin-top: 0;
+}
+
+.error-block {
+    margin-bottom: 25px;
+    display: none;
+}
+.error-block .header {
+    padding: 10px 18px;
+    font-weight: 500;
+    font-size: 20px;
+    color: white;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, .2);
+    background-color: var(--error);
+}
+.error-block .message {
+    padding: 18px;
+    border: 1px solid var(--error);
+    border-top: none;
+}
+
+.subgraph-row {
+    width: 100%;
+    margin-bottom: 25px;
+    padding: 16px 18px 12px;
+    text-decoration: none;
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -o-border-radius: 4px;
+    -ms-border-radius: 4px;
+    display: block;
+}
+.subgraph-row .header {
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.subgraph-row .header .name {
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+.subgraph-row .header .chain {
+    margin-left: 10px;
+    margin-right: auto;
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+}
+.subgraph-row .header .chain .chain-icon {
+    margin-right: 4px;
+}
+.subgraph-row .header .chain .chain-icon img {
+    width: 14px;
+    height: 14px;
+    display: block;
+}
+.subgraph-row .header .status {
+    color: var(--success);
+    text-transform: capitalize;
+}
+.subgraph-row .header .status.pending {
+    color: var(--warning);
+}
+.subgraph-row .header .status.error {
+    color: var(--error);
+}
+
+.subgraph-row .progress {
+    height: 24px;
+    margin-bottom: 6px;
+    background-color: var(--progress-bg);
+    border-radius: .25rem;
+    overflow: hidden;
+}
+.subgraph-row .progress .progress-bar {
+    height: 100%;
+    color: white;
+    font-size: 12px;
+    background-color: var(--success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: width .2s ease-out;
+}
+.subgraph-row .progress .progress-bar.error {
+    background-color: var(--error);
+}
+
+.subgraph-row .legend {
+    margin-top: 12px;
+    display: none;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative;
+}
+.subgraph-row .legend .item {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+.subgraph-row .legend .spacer {
+    height: 1px;
+    margin: 7px 14px 0 14px;
+    background: var(--border-primary);
+    flex: 1;
+    opacity: .6;
+}
+
+.subgraph-row .info {
+    margin: 16px -18px -12px;
+    padding: 10px 18px 10px;
+    border-top: 1px solid var(--border-primary);
+    background: var(--bg-primary);
+}
+.subgraph-row .info .item {
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.subgraph-row .info .item .label {
+    font-weight: bold;
+}
+.subgraph-row .info .item .value {
+    color: var(--text-secondary);
+}
