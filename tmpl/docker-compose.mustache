@@ -95,8 +95,8 @@ services:
       node_id: {{prefix name}}
       node_role: index-node
       postgres_host: postgres
-      postgres_user: {{dbUser}}
-      postgres_pass: {{dbPassword}}
+      postgres_user: {{@root.dbUser}}
+      postgres_pass: {{@root.dbPassword}}
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
