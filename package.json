@@ -1,7 +1,7 @@
 {
   "name": "graph-node",
   "version": "1.0.0",
-  "description": "",
+  "description": "Graph Node",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -15,12 +15,14 @@
   "homepage": "https://github.com/itsib/graph-node#readme",
   "scripts": {
     "start": "node index.js",
-    "prepare": "node tmpl/prepare.js"
+    "config": "node tmpl/prepare.js"
   },
   "dependencies": {
     "express": "^4.17.1",
+    "node-fetch": "^2.0.0",
     "pg": "^8.7.1",
-    "pg-cursor": "^2.7.1"
+    "pg-cursor": "^2.7.1",
+    "toml": "^3.0.0"
   },
   "devDependencies": {
     "handlebars": "^4.7.7"

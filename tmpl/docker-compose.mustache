@@ -34,6 +34,9 @@ services:
       PG_USER: {{dbUser}}
       PG_PASSWORD: {{dbPassword}}
       PG_DATABASE: graph-node
+      GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
+    volumes:
+      - ./nodes-conf:/var/lib/graph-node
     networks:
       - graph_net
 

@@ -1,9 +1,39 @@
 const express = require('express');
 const { Client } = require('pg');
+const fs = require('fs');
+const toml = require('toml');
+const fetch = require('node-fetch');
 
 const app = express();
-const { PG_HOST, PG_PORT, PG_USER, PG_PASSWORD, PG_DATABASE } = process.env;
+const { PG_HOST, PG_PORT, PG_USER, PG_PASSWORD, PG_DATABASE, GRAPH_NODE_CONFIG } = process.env;
 const PORT = process.env.PORT || 8080;
+
+/**
+ * RPC URLs to check node current block.
+ * @type {{bsc: string, kovan: string, matic: string, rinkeby: string, mainnet: string, goerli: string, ropsten: string}}
+ */
+const PUBLIC_RPC = {
+  mainnet: 'https://main-rpc.linkpool.io',
+  ropsten: 'https://ropsten.infura.io/v3/a4ceed48e86948ab835e6512025ddad4',
+  rinkeby: 'https://rinkeby-light.eth.linkpool.io',
+  goerli: 'https://goerli-light.eth.linkpool.io',
+  kovan: 'https://kovan.infura.io/v3/a4ceed48e86948ab835e6512025ddad4',
+  matic: 'https://rpc-mainnet.matic.network',
+  bsc: 'https://bsc-dataseed.binance.org',
+};
+
+if (!fs.existsSync(GRAPH_NODE_CONFIG)) {
+  console.error('GRAPH_NODE_CONFIG should be available file path');
+  process.exit(-1);
+}
+
+let graphConfig;
+try {
+  graphConfig = toml.parse(fs.readFileSync(GRAPH_NODE_CONFIG, 'utf-8'));
+} catch (e) {
+  console.error('Can\'t parse toml file.');
+  process.exit(-1);
+}
 
 const client = new Client({
   host: PG_HOST,
@@ -43,5 +73,56 @@ app.get('/api/subgraphs', async (req, res) => {
       updatedAt: currentVersion ? Number(currentVersion.created_at) : Number(subgraph.created_at),
     }
   });
-  res.json(result);
+  return res.json(result);
+});
+
+app.get('/api/head-blocks', async (req, res) => {
+  try {
+    const chains = Object.keys(graphConfig.chains).filter(key => typeof graphConfig.chains[key] === 'object');
+
+    const latestBlocks = await Promise.all(chains.map(chain => {
+      const url = PUBLIC_RPC[chain];
+      if (!url) {
+        return Promise.resolve({
+          network: chain,
+          block: null,
+          error: `Chain "${chain}" not provided RPC url`,
+        });
+      }
+
+      const conf = {
+        method: 'POST',
+        body: '{"method":"eth_blockNumber","params":[],"id":1,"jsonrpc":"2.0"}',
+        headers: {'Content-Type': 'application/json'}
+      }
+      return fetch(url, conf)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            return Promise.reject(new Error(`Status code ${response.status}`));
+          }
+        })
+        .then(data => {
+          return Promise.resolve({
+            network: chain,
+            block: parseInt(data.result, 16),
+            error: null,
+          });
+        })
+        .catch(err => {
+          console.error(err);
+          return Promise.resolve({
+            network: chain,
+            block: null,
+            error: `Chain "${chain}" rpc call error ${err.message}`,
+          });
+        })
+    }));
+
+    return res.json(latestBlocks);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).send(e.message);
+  }
 });

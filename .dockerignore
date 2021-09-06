@@ -7,6 +7,7 @@ node_modules/
 nginx-conf/
 nginx-logs/
 nodes-conf/
+tmpl/
 
 npm-debug.log
 Dockerfile

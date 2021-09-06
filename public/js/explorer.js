@@ -12,7 +12,17 @@ async function fetchSubgraphs() {
   return res.json();
 }
 
-async function fetchFullSubgraphs(subgraphs) {
+async function fetchHeadBlocks() {
+  const res = await fetch('/api/head-blocks');
+
+  if (!res.ok) {
+    throw new Error(`Fetch Error code ${res.status}`);
+  }
+
+  return res.json();
+}
+
+async function fetchFullSubgraphs(subgraphs, headBlocks) {
   const query = `query indexingStatuses ($subgraphs: [String!]) {
     indexingStatuses (subgraphs: $subgraphs) {
       subgraph
@@ -77,11 +87,14 @@ async function fetchFullSubgraphs(subgraphs) {
   return subgraphs.map(subgraph => {
     const indexingStatus = subgraph.deployment ? indexingStatuses.find(i => i.subgraph === subgraph.deployment) : null;
     const chainIndexingInfo = indexingStatus && indexingStatus.chains && indexingStatus.chains[0];
+    const networkName = chainIndexingInfo ? chainIndexingInfo.network : null;
+    const headBlock = networkName ? headBlocks.find(i => i.network === networkName) : null;
 
     return Object.assign({}, subgraph, {
-      chain: !chainIndexingInfo ? null : {
-        name: chainIndexingInfo.network,
-        headBlock: chainIndexingInfo.chainHeadBlock ? Number(chainIndexingInfo.chainHeadBlock.number) : null,
+      chain: {
+        name: chainIndexingInfo ? chainIndexingInfo.network : null,
+        headBlock: chainIndexingInfo && chainIndexingInfo.chainHeadBlock ? Number(chainIndexingInfo.chainHeadBlock.number) : null,
+        realHeadBlock: headBlock ? headBlock.block : null,
       },
       indexing: !chainIndexingInfo ? null : {
         start: Number(chainIndexingInfo.earliestBlock.number),
@@ -173,9 +186,18 @@ function renderSubgraphs(fullSubgraphs) {
     const legendCurrentNode = row.querySelector('.subgraph-current-block');
     const legendHeadNode = row.querySelector('.subgraph-head-block');
     const infoNode = row.querySelector('.subgraph-info');
+    const delayingNode = row.querySelector('.subgraph-delaying');
+    const delayBlocksNode = row.querySelector('.subgraph-delay-blocks');
+    const headBlockNode = row.querySelector('.subgraph-head-block');
 
+    // Header
     nameNode.innerHTML = fullSubgraph.name;
     nameNode.href = `/subgraphs/name/${fullSubgraph.name}/graphql`;
+    if (chainName) {
+      chainNameNode.innerHTML = chainName;
+      chainIconNode.innerHTML = '';
+      chainIconNode.appendChild(chainIcon);
+    }
     statusNode.innerHTML = status.replace('-', ' ');
     statusNode.classList.remove('pending', 'error');
     if (status === 'failed' || status === 'wait-deploy') {
@@ -183,26 +205,31 @@ function renderSubgraphs(fullSubgraphs) {
     } else if (status === 'pending') {
       statusNode.classList.add('pending');
     }
+    // Progress bar
     progressNode.style.width = `${progress}%`;
     progressNode.innerHTML = progress > 8 ? `${progress}%` : '';
     progressNode.classList.remove('error');
     if (status === 'failed') {
       progressNode.classList.add('error');
     }
-    if (chainName) {
-      chainNameNode.innerHTML = chainName;
-      chainIconNode.innerHTML = '';
-      chainIconNode.appendChild(chainIcon);
-    }
-    if (fullSubgraph.indexing && fullSubgraph.chain && fullSubgraph.indexing.start && fullSubgraph.indexing.current && fullSubgraph.chain.headBlock) {
+    // Legend
+    if (fullSubgraph.indexing && fullSubgraph.chain && fullSubgraph.indexing.start && fullSubgraph.indexing.current && (fullSubgraph.chain.headBlock || fullSubgraph.chain.realHeadBlock)) {
       legendNode.style.display = 'flex';
       legendStartNode.innerHTML = `${fullSubgraph.indexing.start}`;
       legendCurrentNode.innerHTML = `${fullSubgraph.indexing.current}`;
-      legendHeadNode.innerHTML = `${fullSubgraph.chain.headBlock}`;
+      legendHeadNode.innerHTML = `${fullSubgraph.chain.headBlock || fullSubgraph.chain.realHeadBlock}`;
     } else {
       legendNode.style.display = 'none';
     }
-
+    // Block range Error
+    if (fullSubgraph.chain && fullSubgraph.chain.headBlock && fullSubgraph.chain.realHeadBlock && fullSubgraph.chain.realHeadBlock - fullSubgraph.chain.headBlock > 5) {
+      delayingNode.style.display = 'block';
+      delayBlocksNode.innerHTML = `${fullSubgraph.chain.realHeadBlock - fullSubgraph.chain.headBlock}`;
+      headBlockNode.innerHTML = `${fullSubgraph.chain.realHeadBlock}`;
+    } else {
+      delayingNode.style.display = 'none';
+    }
+    // Common info
     infoNode.innerHTML = `
       ${fullSubgraph.deployment ? `
       <div class="item">
@@ -230,22 +257,25 @@ function renderSubgraphs(fullSubgraphs) {
         <div class="label">Updated At:</div>
         <div class="value">${dateFormat(new Date(fullSubgraph.updatedAt * 1000))}</div>
       </div>`;
-  })
+  });
 }
 
 (function () {
-  function tick() {
-    fetchSubgraphs()
-      .then(subgraphs => {
+  function refreshSubgraphs() {
+    Promise.all([fetchSubgraphs(), fetchHeadBlocks()])
+      .then(([subgraphs, headBlocks]) => {
         if (!subgraphs.length) {
           return Promise.reject(new Error(`Not a any subgraph created yet`));
         }
-        return fetchFullSubgraphs(subgraphs);
+        return fetchFullSubgraphs(subgraphs, headBlocks);
       })
       .then(fullSubgraphs => renderSubgraphs(fullSubgraphs))
-      .then(() => setTimeout(tick, 3000))
-      .catch(error => showError(error.message));
+      .then(() => setTimeout(refreshSubgraphs, 5000))
+      .catch(error => {
+        showError(error.message);
+        setTimeout(refreshSubgraphs, 10000);
+      });
   }
 
-  tick();
+  refreshSubgraphs();
 })();
