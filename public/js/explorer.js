@@ -203,7 +203,6 @@ function renderSubgraphs(fullSubgraphs) {
       legendNode.style.display = 'none';
     }
 
-    // deployment
     infoNode.innerHTML = `
       ${fullSubgraph.deployment ? `
       <div class="item">

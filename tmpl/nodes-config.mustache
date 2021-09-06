@@ -1,0 +1,28 @@
+[store]
+[store.primary]
+connection = "postgresql://${postgres_user}:${postgres_pass}@${postgres_host}/${postgres_db}"
+pool_size = 10
+
+[chains]
+ingestor = "{{prefix defaultIndexedNode}}"
+{{#each indexedNodes as | node |}}
+[chains.{{node.name}}]
+shard = "primary"
+provider = [
+    {{#each node.rpc}}
+    { label = "{{node.name}}-{{@index}}", url = "{{this}}", features = ["archive"] },
+    {{/each}}
+]
+{{/each}}
+
+[general]
+query = "{{prefix queryNode 'query'}}"
+
+[deployment]
+{{#each indexedNodes as | node |}}
+[[deployment.rule]]
+match = { network = "{{node.name}}" }
+indexers = ["{{prefix node.name}}"]
+{{/each}}
+[[deployment.rule]]
+indexers = ["{{prefix defaultIndexedNode}}"]

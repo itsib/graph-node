@@ -1,12 +1,8 @@
 {
-  "name": "the-graph-server",
+  "name": "graph-node",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/itsib/graph-node.git"
@@ -17,9 +13,16 @@
     "url": "https://github.com/itsib/graph-node/issues"
   },
   "homepage": "https://github.com/itsib/graph-node#readme",
+  "scripts": {
+    "start": "node index.js",
+    "prepare": "node tmpl/prepare.js"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "pg": "^8.7.1",
     "pg-cursor": "^2.7.1"
+  },
+  "devDependencies": {
+    "handlebars": "^4.7.7"
   }
 }

@@ -3,26 +3,23 @@
 connection = "postgresql://${postgres_user}:${postgres_pass}@${postgres_host}/${postgres_db}"
 pool_size = 10
 
-
 [chains]
 ingestor = "graph_indexed_node_common"
-
 [chains.mainnet]
 shard = "primary"
 provider = [
-    { label = "mainnet-0", url = "http://165.227.131.112:8545", features = ["archive", "traces"] }
+    { label = "mainnet-0", url = "http://165.227.131.112:8545", features = ["archive"] },
+    { label = "mainnet-1", url = "http://142.93.163.224:8545", features = ["archive"] },
 ]
-
 [chains.matic]
 shard = "primary"
 provider = [
-    { label = "matic-0", url = "http://207.154.238.222:8545", features = ["archive", "traces"] }
+    { label = "matic-0", url = "http://207.154.238.222:8545", features = ["archive"] }
 ]
-
 [chains.bsc]
 shard = "primary"
 provider = [
-    { label = "bsc-0", url = "http://167.99.253.210:8545", features = ["archive", "traces"] }
+    { label = "bsc-0", url = "http://167.99.253.210:8545", features = ["archive"] }
 ]
 
 [general]
@@ -32,14 +29,11 @@ query = "graph_query_node"
 [[deployment.rule]]
 match = { network = "mainnet" }
 indexers = ["graph_indexed_node_mainnet"]
-
 [[deployment.rule]]
 match = { network = "matic" }
 indexers = ["graph_indexed_node_matic"]
-
 [[deployment.rule]]
 match = { network = "bsc" }
 indexers = ["graph_indexed_node_bsc"]
-
 [[deployment.rule]]
 indexers = ["graph_indexed_node_common"]

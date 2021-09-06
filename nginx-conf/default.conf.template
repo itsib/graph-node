@@ -14,7 +14,7 @@ server {
     }
 
     location ~* /subgraphs/.+|/graphiql.css|/graphiql.min.js {
-        proxy_pass          http://graph_query_node:8000;
+        proxy_pass          http://${QUERY_NODE}:8000;
         proxy_buffering     off;
         proxy_max_temp_file_size 0;
         proxy_redirect      off;
@@ -23,7 +23,7 @@ server {
     }
 
     location ^~ /graphql {
-        proxy_pass          http://graph_query_node:8030;
+        proxy_pass          http://${QUERY_NODE}:8030;
         proxy_buffering     off;
         proxy_max_temp_file_size 0;
         proxy_redirect      off;
@@ -33,7 +33,7 @@ server {
 
     location ^~ /ws {
         rewrite             "^/ws(/.*)$" $1 break;
-    	proxy_pass          http://graph_query_node:8001;
+    	proxy_pass          http://${QUERY_NODE}:8001;
         proxy_redirect      off;
         proxy_set_header    Upgrade $http_upgrade;
         proxy_set_header    Connection "upgrade";
@@ -47,7 +47,7 @@ server {
             return 401;
         }
         rewrite             "^/deploy(/.*)$" $1 break;
-        proxy_pass          http://graph_indexed_node_common:8020;
+        proxy_pass          http://${DEPLOY_NODE}:8020;
         proxy_buffering     off;
         proxy_max_temp_file_size 0;
         proxy_redirect      off;
@@ -78,7 +78,7 @@ server {
     listen [::]:8001;
 
     location / {
-        proxy_pass          http://graph_query_node:8001;
+        proxy_pass          http://${QUERY_NODE}:8001;
         proxy_redirect      off;
         proxy_set_header    Upgrade $http_upgrade;
         proxy_set_header    Connection "upgrade";

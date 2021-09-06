@@ -10,6 +10,6 @@ nodes-conf/
 
 npm-debug.log
 Dockerfile
-docker-compose.yml
+docker-compose.back.yml
 .dockerignore
 README.md

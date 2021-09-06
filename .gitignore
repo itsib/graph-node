@@ -4,3 +4,6 @@
 
 nginx-logs/
 node_modules/
+
+docker-compose.yml
+nodes-conf/config.toml

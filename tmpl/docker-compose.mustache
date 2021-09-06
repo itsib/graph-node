@@ -10,13 +10,15 @@ services:
     ports:
       - '4000:80'
     environment:
-      - AUTH_TOKEN=super-secret-bearer-token
+      - AUTH_TOKEN={{deployAccessToken}}
+      - QUERY_NODE={{prefix queryNode 'query'}}
+      - DEPLOY_NODE={{prefix defaultIndexedNode}}
     networks:
       - graph_net
     depends_on:
       - graph_explorer
-      - graph_query_node
-      - graph_indexed_node_common
+      - {{prefix queryNode 'query'}}
+      - {{prefix defaultIndexedNode}}
       - ipfs
 
   graph_explorer:
@@ -29,13 +31,13 @@ services:
       - postgres
     environment:
       PG_HOST: postgres
-      PG_USER: graph-node
-      PG_PASSWORD: let_me_in
+      PG_USER: {{dbUser}}
+      PG_PASSWORD: {{dbPassword}}
       PG_DATABASE: graph-node
     networks:
       - graph_net
 
-  graph_query_node:
+  {{prefix queryNode 'query'}}:
     image: sergeyitsib/graph-node
     ports:
       - '127.0.0.1:8000:8000'
@@ -45,21 +47,21 @@ services:
       - ipfs
       - postgres
     environment:
-      node_id: graph_query_node
+      node_id: {{prefix queryNode 'query'}}
       node_role: query-node
       postgres_host: postgres
-      postgres_user: graph-node
-      postgres_pass: let_me_in
+      postgres_user: {{dbUser}}
+      postgres_pass: {{dbPassword}}
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
-      BLOCK_INGESTOR: graph_indexed_node_common
+      BLOCK_INGESTOR: {{prefix @root.defaultIndexedNode}}
     volumes:
       - ./nodes-conf:/var/lib/graph-node
     networks:
       - graph_net
 
-  graph_indexed_node_common:
+  {{prefix defaultIndexedNode}}:
     image: sergeyitsib/graph-node
     ports:
       - '127.0.0.1:8120:8020'
@@ -67,15 +69,15 @@ services:
       - ipfs
       - postgres
     environment:
-      node_id: graph_indexed_node_common
+      node_id: {{prefix defaultIndexedNode}}
       node_role: index-node
       postgres_host: postgres
-      postgres_user: graph-node
-      postgres_pass: let_me_in
+      postgres_user: {{dbUser}}
+      postgres_pass: {{dbPassword}}
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
-      BLOCK_INGESTOR: graph_indexed_node_common
+      BLOCK_INGESTOR: {{prefix @root.defaultIndexedNode}}
 #      RUST_LOG: info
 #      GRAPH_LOG: info
     volumes:
@@ -83,66 +85,28 @@ services:
     networks:
       - graph_net
 
-  graph_indexed_node_mainnet:
+{{#indexedNodes}}
+  {{prefix name}}:
     image: sergeyitsib/graph-node
     depends_on:
       - ipfs
       - postgres
     environment:
-      node_id: graph_indexed_node_mainnet
+      node_id: {{prefix name}}
       node_role: index-node
       postgres_host: postgres
-      postgres_user: graph-node
-      postgres_pass: let_me_in
+      postgres_user: {{dbUser}}
+      postgres_pass: {{dbPassword}}
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
-      BLOCK_INGESTOR: graph_indexed_node_common
+      BLOCK_INGESTOR: {{prefix @root.defaultIndexedNode}}
     volumes:
       - ./nodes-conf:/var/lib/graph-node
     networks:
       - graph_net
 
-  graph_indexed_node_matic:
-    image: sergeyitsib/graph-node
-    depends_on:
-      - ipfs
-      - postgres
-    environment:
-      node_id: graph_indexed_node_matic
-      node_role: index-node
-      postgres_host: postgres
-      postgres_user: graph-node
-      postgres_pass: let_me_in
-      postgres_db: graph-node
-      ipfs: 'ipfs:5001'
-      GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
-      BLOCK_INGESTOR: graph_indexed_node_common
-    volumes:
-      - ./nodes-conf:/var/lib/graph-node
-    networks:
-      - graph_net
-
-  graph_indexed_node_bsc:
-    image: sergeyitsib/graph-node
-    depends_on:
-      - ipfs
-      - postgres
-    environment:
-      node_id: graph_indexed_node_bsc
-      node_role: index-node
-      postgres_host: postgres
-      postgres_user: graph-node
-      postgres_pass: let_me_in
-      postgres_db: graph-node
-      ipfs: 'ipfs:5001'
-      GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
-      BLOCK_INGESTOR: graph_indexed_node_common
-    volumes:
-      - ./nodes-conf:/var/lib/graph-node
-    networks:
-      - graph_net
-
+{{/indexedNodes}}
   ipfs:
     image: ipfs/go-ipfs:v0.4.23
     ports:
@@ -158,8 +122,8 @@ services:
       - '127.0.0.1:5432:5432'
     command: ["postgres", "-cshared_preload_libraries=pg_stat_statements"]
     environment:
-      POSTGRES_USER: graph-node
-      POSTGRES_PASSWORD: let_me_in
+      POSTGRES_USER: {{dbUser}}
+      POSTGRES_PASSWORD: {{dbPassword}}
       POSTGRES_DB: graph-node
     networks:
       - graph_net
