@@ -1,4 +1,5 @@
 {
+  "maxApiVersion": "0.0.3",
   "deployAccessToken": "super-secret-bearer-token",
   "dbUser": "graph-node",
   "dbPassword": "let_me_in",
@@ -11,7 +12,7 @@
     },
     {
       "name": "kovan",
-      "rpc": ["https://kovan.infura.io/v3/a4ceed48e86948ab835e6512025ddad4"]
+      "rpc": ["https://kovan.infura.io/v3/a4ceed48e86948ab835e6512025ddad4", "https://kovan.infura.io/v3/fe327559be4c41b18d313acd242834a8"]
     }
   ]
 }

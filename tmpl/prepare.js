@@ -31,5 +31,11 @@ handlebars.registerHelper('prefix', function (name, type) {
   return `${'query' === type ? QUERY_NODE_PREFIX : INDEX_NODE_PREFIX}_${name}`;
 });
 
+let portsCount = 0;
+handlebars.registerHelper('metricPort', function () {
+  const portNumber = `${portsCount++}`;
+  return `9${'0'.repeat(3-portNumber.length)}${portNumber}`;
+});
+
 fs.writeFileSync(path.resolve(`${__dirname}/../docker-compose.yml`), handlebars.compile(dockerComposeTmpl)(config));
 fs.writeFileSync(path.resolve(`${__dirname}/../nodes-conf/config.toml`), handlebars.compile(nodesConfigTmpl)(config));

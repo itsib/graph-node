@@ -46,6 +46,7 @@ services:
       - '127.0.0.1:8000:8000'
       - '127.0.0.1:8001:8001'
       - '127.0.0.1:8030:8030'
+      - '127.0.0.1:{{metricPort}}:8040'
     depends_on:
       - ipfs
       - postgres
@@ -57,6 +58,7 @@ services:
       postgres_pass: {{dbPassword}}
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
+      GRAPH_MAX_API_VERSION: {{maxApiVersion}}
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
       BLOCK_INGESTOR: {{prefix @root.defaultIndexedNode}}
     volumes:
@@ -68,6 +70,7 @@ services:
     image: sergeyitsib/graph-node
     ports:
       - '127.0.0.1:8120:8020'
+      - '127.0.0.1:{{metricPort}}:8040'
     depends_on:
       - ipfs
       - postgres
@@ -79,6 +82,7 @@ services:
       postgres_pass: {{dbPassword}}
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
+      GRAPH_MAX_API_VERSION: {{maxApiVersion}}
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
       BLOCK_INGESTOR: {{prefix @root.defaultIndexedNode}}
 #      RUST_LOG: info
@@ -91,6 +95,8 @@ services:
 {{#indexedNodes}}
   {{prefix name}}:
     image: sergeyitsib/graph-node
+    ports:
+      - '127.0.0.1:{{metricPort}}:8040'
     depends_on:
       - ipfs
       - postgres
@@ -102,6 +108,7 @@ services:
       postgres_pass: {{@root.dbPassword}}
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
+      GRAPH_MAX_API_VERSION: {{maxApiVersion}}
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
       BLOCK_INGESTOR: {{prefix @root.defaultIndexedNode}}
     volumes:
