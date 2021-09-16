@@ -124,7 +124,7 @@ services:
     networks:
       - graph_net
     volumes:
-      - graph_ipfs:/data/ipfs
+      - ./volumes/graph_ipfs:/data/ipfs
 
   postgres:
     image: postgres
@@ -138,11 +138,7 @@ services:
     networks:
       - graph_net
     volumes:
-      - graph_postgres:/var/lib/postgresql/data
-
-volumes:
-  graph_postgres:
-  graph_ipfs:
+      - ./volumes/graph_postgres:/var/lib/postgresql/data
 
 networks:
   graph_net:
