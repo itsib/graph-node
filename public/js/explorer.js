@@ -188,7 +188,7 @@ function renderSubgraphs(fullSubgraphs) {
     const infoNode = row.querySelector('.subgraph-info');
     const delayingNode = row.querySelector('.subgraph-delaying');
     const delayBlocksNode = row.querySelector('.subgraph-delay-blocks');
-    const headBlockNode = row.querySelector('.subgraph-head-block');
+    const headBlockNode = row.querySelector('.subgraph-real-head-block');
 
     // Header
     nameNode.innerHTML = fullSubgraph.name;
