@@ -95,6 +95,11 @@ services:
 {{#indexedNodes}}
   {{prefix name}}:
     image: sergeyitsib/graph-node
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
     ports:
       - '127.0.0.1:{{metricPort}}:8040'
     depends_on:
