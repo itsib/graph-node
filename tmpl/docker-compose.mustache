@@ -9,7 +9,6 @@ services:
       - ./nginx-logs:/var/log/nginx
     ports:
       - '4000:80'
-      - '8001:8001'
     environment:
       - AUTH_TOKEN={{deployAccessToken}}
       - QUERY_NODE={{prefix queryNode 'query'}}
@@ -45,7 +44,7 @@ services:
     image: sergeyitsib/graph-node
     ports:
       - '127.0.0.1:8000:8000'
-      - '127.0.0.1:8001:8001'
+      - '8001:8001'
       - '127.0.0.1:8030:8030'
       - '127.0.0.1:{{metricPort}}:8040'
     depends_on:
