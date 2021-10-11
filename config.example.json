@@ -1,7 +1,5 @@
 {
-  "deployAccessToken": "super-secret-bearer-token",
-  "dbUser": "graph-node",
-  "dbPassword": "let_me_in",
+  "maxApiVersion": "0.0.3",
   "queryNode": "default",
   "defaultIndexedNode": "default",
   "indexedNodes": [

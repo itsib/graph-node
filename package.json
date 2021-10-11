@@ -15,7 +15,9 @@
   "homepage": "https://github.com/itsib/graph-node#readme",
   "scripts": {
     "start": "node index.js",
-    "config": "node tmpl/prepare.js"
+    "nodes:config": "node tmpl/prepare.js",
+    "nodes:up": "npm run nodes:config && docker-compose up -d",
+    "nodes:down": "docker-compose down"
   },
   "dependencies": {
     "express": "^4.17.1",

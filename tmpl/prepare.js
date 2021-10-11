@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const handlebars = require('handlebars');
 
+const DEPLOY_ACCESS_TOKEN = process.env.SUBGRAPH_DEPLOY_ACCESS_TOKEN || 'super-secret-bearer-token';
+const DB_USER = process.env.SUBGRAPH_DB_USER || 'graph-node';
+const DB_PASSWORD = process.env.SUBGRAPH_DB_PASSWORD || 'let_me_in';
 const INDEX_NODE_PREFIX = 'graph_indexed_node';
 const QUERY_NODE_PREFIX = 'graph_query_node';
 
@@ -26,6 +29,9 @@ const dockerComposeTmpl = fs.readFileSync(dockerComposeTmplFile, 'utf-8');
 const nodesConfigTmpl = fs.readFileSync(nodesConfigTmplFile, 'utf-8');
 
 const config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
+config.deployAccessToken = DEPLOY_ACCESS_TOKEN;
+config.dbUser = DB_USER;
+config.dbPassword = DB_PASSWORD;
 
 handlebars.registerHelper('prefix', function (name, type) {
   return `${'query' === type ? QUERY_NODE_PREFIX : INDEX_NODE_PREFIX}_${name}`;
