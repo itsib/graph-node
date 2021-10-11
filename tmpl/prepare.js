@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const handlebars = require('handlebars');
+require('dotenv').config({path: path.resolve(`${__dirname}/../.env`)});
 
 const DEPLOY_ACCESS_TOKEN = process.env.SUBGRAPH_DEPLOY_ACCESS_TOKEN || 'super-secret-bearer-token';
 const DB_USER = process.env.SUBGRAPH_DB_USER || 'graph-node';

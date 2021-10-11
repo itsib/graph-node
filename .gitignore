@@ -5,6 +5,7 @@
 nginx-logs/
 node_modules/
 
+.env
 docker-compose.yml
 nodes-conf/config.toml
 volumes/

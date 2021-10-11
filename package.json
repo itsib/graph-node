@@ -16,8 +16,8 @@
   "scripts": {
     "start": "node index.js",
     "nodes:config": "node tmpl/prepare.js",
-    "nodes:up": "npm run nodes:config && docker-compose up -d",
-    "nodes:down": "docker-compose down"
+    "nodes:run": "npm run nodes:config && docker-compose up -d",
+    "nodes:stop": "docker-compose down"
   },
   "dependencies": {
     "express": "^4.17.1",
@@ -27,6 +27,7 @@
     "toml": "^3.0.0"
   },
   "devDependencies": {
+    "dotenv": "^10.0.0",
     "handlebars": "^4.7.7"
   }
 }
