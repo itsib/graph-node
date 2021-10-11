@@ -9,6 +9,7 @@ services:
       - ./nginx-logs:/var/log/nginx
     ports:
       - '4000:80'
+      - '8001:8001'
     environment:
       - AUTH_TOKEN={{deployAccessToken}}
       - QUERY_NODE={{prefix queryNode 'query'}}

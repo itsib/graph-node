@@ -243,7 +243,7 @@ function renderSubgraphs(fullSubgraphs) {
       </div>
       <div class="item">
         <div class="label">Subscriptions (WS):</div>
-        <div class="value">${location.origin}/ws/subgraphs/name/${fullSubgraph.name}</div>
+        <div class="value">${location.origin.replace(/^http/, 'ws')}/ws/subgraphs/name/${fullSubgraph.name}</div>
       </div>
       <div class="item">
         <div class="label">Entities Count:</div>
