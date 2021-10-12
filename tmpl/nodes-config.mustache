@@ -1,3 +1,6 @@
+[general]
+query = "{{prefix queryNode 'query'}}"
+
 [store]
 [store.primary]
 connection = "postgresql://${postgres_user}:${postgres_pass}@${postgres_host}/${postgres_db}"
@@ -14,9 +17,6 @@ provider = [
     {{/each}}
 ]
 {{/each}}
-
-[general]
-query = "{{prefix queryNode 'query'}}"
 
 [deployment]
 {{#each indexedNodes as | node |}}

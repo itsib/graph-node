@@ -44,7 +44,7 @@ services:
     image: sergeyitsib/graph-node
     ports:
       - '127.0.0.1:8000:8000'
-      - '8001:8001'
+      - '127.0.0.1:8001:8001'
       - '127.0.0.1:8030:8030'
       - '127.0.0.1:{{metricPort}}:8040'
     depends_on:
@@ -52,6 +52,7 @@ services:
       - postgres
     environment:
       node_id: {{prefix queryNode 'query'}}
+      metrics_port: {{metricPort}}
       node_role: query-node
       postgres_host: postgres
       postgres_user: {{dbUser}}
@@ -76,6 +77,7 @@ services:
       - postgres
     environment:
       node_id: {{prefix defaultIndexedNode}}
+      metrics_port: {{metricPort}}
       node_role: index-node
       postgres_host: postgres
       postgres_user: {{dbUser}}
@@ -107,6 +109,7 @@ services:
       - postgres
     environment:
       node_id: {{prefix name}}
+      metrics_port: {{metricPort}}
       node_role: index-node
       postgres_host: postgres
       postgres_user: {{@root.dbUser}}

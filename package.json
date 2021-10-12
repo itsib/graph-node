@@ -16,7 +16,9 @@
   "scripts": {
     "start": "node index.js",
     "nodes:config": "node tmpl/prepare.js",
+    "nodes:config:local": "node tmpl/prepare.js local",
     "nodes:run": "npm run nodes:config && docker-compose up -d",
+    "nodes:run:local": "npm run nodes:config:local && docker-compose up",
     "nodes:stop": "docker-compose down"
   },
   "dependencies": {

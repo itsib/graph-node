@@ -9,7 +9,7 @@ const DB_PASSWORD = process.env.SUBGRAPH_DB_PASSWORD || 'let_me_in';
 const INDEX_NODE_PREFIX = 'graph_indexed_node';
 const QUERY_NODE_PREFIX = 'graph_query_node';
 
-const configFile = path.resolve(`${__dirname}/../config.json`);
+const configFile = path.resolve(`${__dirname}/../config${process.argv[2] === 'local' ? '.local' : ''}.json`);
 const dockerComposeTmplFile = path.resolve(`${__dirname}/docker-compose.mustache`);
 const nodesConfigTmplFile = path.resolve(`${__dirname}/nodes-config.mustache`);
 
@@ -39,8 +39,10 @@ handlebars.registerHelper('prefix', function (name, type) {
 });
 
 let portsCount = 0;
+let callsCount = 0;
 handlebars.registerHelper('metricPort', function () {
-  const portNumber = `${portsCount++}`;
+  const portNumber = callsCount % 2 === 0 ? `${portsCount}` : `${portsCount++}`;
+  callsCount++;
   return `9${'0'.repeat(3-portNumber.length)}${portNumber}`;
 });
 
