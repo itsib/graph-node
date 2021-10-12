@@ -1,5 +1,7 @@
 {
   "maxApiVersion": "0.0.3",
+  "baseHttpUrl": "https://sg.plasma.finance",
+  "baseWsUrl": "wss://sg.plasma.finance/ws",
   "queryNode": "default",
   "defaultIndexedNode": "default",
   "indexedNodes": [

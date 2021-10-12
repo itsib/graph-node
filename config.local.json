@@ -1,5 +1,7 @@
 {
   "maxApiVersion": "0.0.3",
+  "baseHttpUrl": "http://localhost:4000",
+  "baseWsUrl": "ws://localhost:4000/ws",
   "queryNode": "default",
   "defaultIndexedNode": "default",
   "indexedNodes": [

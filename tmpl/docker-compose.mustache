@@ -41,7 +41,7 @@ services:
       - graph_net
 
   {{prefix queryNode 'query'}}:
-    image: sergeyitsib/graph-node
+    image: sergeyitsib/graph-node:v0.0.3
     ports:
       - '127.0.0.1:8000:8000'
       - '127.0.0.1:8001:8001'
@@ -59,6 +59,8 @@ services:
       postgres_pass: {{dbPassword}}
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
+      EXTERNAL_HTTP_BASE_URL: {{baseHttpUrl}}
+      EXTERNAL_WS_BASE_URL: {{baseWsUrl}}
       GRAPH_MAX_API_VERSION: {{maxApiVersion}}
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
       BLOCK_INGESTOR: {{prefix @root.defaultIndexedNode}}
@@ -68,7 +70,7 @@ services:
       - graph_net
 
   {{prefix defaultIndexedNode}}:
-    image: sergeyitsib/graph-node
+    image: sergeyitsib/graph-node:v0.0.3
     ports:
       - '127.0.0.1:8120:8020'
       - '127.0.0.1:{{metricPort}}:8040'
@@ -84,6 +86,8 @@ services:
       postgres_pass: {{dbPassword}}
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
+      EXTERNAL_HTTP_BASE_URL: {{baseHttpUrl}}
+      EXTERNAL_WS_BASE_URL: {{baseWsUrl}}
       GRAPH_MAX_API_VERSION: {{maxApiVersion}}
       GRAPH_NODE_CONFIG: /var/lib/graph-node/config.toml
       BLOCK_INGESTOR: {{prefix @root.defaultIndexedNode}}
@@ -96,7 +100,7 @@ services:
 
 {{#indexedNodes}}
   {{prefix name}}:
-    image: sergeyitsib/graph-node
+    image: sergeyitsib/graph-node:v0.0.3
     logging:
       driver: "json-file"
       options:
