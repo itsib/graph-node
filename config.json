@@ -15,7 +15,7 @@
     },
     {
       "name": "bsc",
-      "rpc": ["https://bsc-dataseed2.defibit.io", "http://167.99.253.210:8545"]
+      "rpc": ["http://167.99.253.210:8545"]
     },
     {
       "name": "kovan",
