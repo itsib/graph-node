@@ -22,3 +22,43 @@ SUBGRAPH_DEPLOY_ACCESS_TOKEN="super-secret-bearer-token"
 SUBGRAPH_DB_USER="graph-node"
 SUBGRAPH_DB_PASSWORD="let_me_in"
 ```
+**SUBGRAPH_DEPLOY_ACCESS_TOKEN** Used in 
+```graph auth [options] <node> <access-token>```
+for deployment subgraphs.
+
+The config.json file is used to configure the environment.
+```json5
+{
+  "maxApiVersion": "0.0.3",
+  "baseHttpUrl": "http://localhost:4000",
+  "baseWsUrl": "ws://localhost:4000/ws",
+  "queryNode": "default",
+  "defaultIndexedNode": "default",
+  "indexedNodes": [
+    {
+      "name": "kovan",
+      "rpc": ["https://kovan.infura.io/v3/a4ceed48e86948ab835e6512025ddad4"]
+    }
+  ]
+}
+```
+
+**maxApiVersion** - Maximum apiVersion supported, if a developer tries to create a subgraph with a higher apiVersion than this in their mappings, they'll receive an error. Defaults to 0.0.6.
+
+**baseHttpUrl** - Subgraph queries endpoint
+
+**baseWsUrl** - Subgraph websocket queries endpoint
+
+**queryNode** - Query node name
+
+**defaultIndexedNode** - Default indexed node name (Used as deployment node)
+
+**indexedNodes** - Indexed nodes foreach chain id
+
+### Commands
+ 
+```npm run nodes:run``` Runs environment subgraph nodes
+
+```npm run nodes:run:local``` Runs environment subgraph nodes used config.local.json
+
+```npm run nodes:stop``` Stop environment subgraph nodes
