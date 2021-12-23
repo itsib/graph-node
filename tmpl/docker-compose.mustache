@@ -41,7 +41,7 @@ services:
       - graph_net
 
   {{prefix queryNode 'query'}}:
-    image: sergeyitsib/graph-node:v0.0.3
+    image: sergeyitsib/graph-node:latest
     ports:
       - '127.0.0.1:8000:8000'
       - '127.0.0.1:8001:8001'
@@ -70,7 +70,7 @@ services:
       - graph_net
 
   {{prefix defaultIndexedNode}}:
-    image: sergeyitsib/graph-node:v0.0.3
+    image: sergeyitsib/graph-node:latest
     ports:
       - '127.0.0.1:8120:8020'
       - '127.0.0.1:{{metricPort}}:8040'
@@ -100,7 +100,7 @@ services:
 
 {{#indexedNodes}}
   {{prefix name}}:
-    image: sergeyitsib/graph-node:v0.0.4
+    image: sergeyitsib/graph-node:latest
     logging:
       driver: "json-file"
       options:
