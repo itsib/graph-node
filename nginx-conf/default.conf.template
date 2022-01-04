@@ -35,7 +35,7 @@ server {
         rewrite                "^/ws(/.*)$" $1 break;
     	proxy_pass             http://${QUERY_NODE}:8001;
         proxy_redirect         off;
-        proxy_connect_timeout  86400;
+#         proxy_connect_timeout  86400;
         proxy_set_header       Upgrade $http_upgrade;
         proxy_set_header       Connection "upgrade";
         proxy_set_header       Host $host;
