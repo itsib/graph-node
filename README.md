@@ -57,8 +57,10 @@ The config.json file is used to configure the environment.
 
 ### Commands
  
-```npm run nodes:run``` Runs environment subgraph nodes
+```npm run nodes:start``` Runs environment subgraph nodes
 
-```npm run nodes:run:local``` Runs environment subgraph nodes used config.local.json
+```npm run nodes:start:local``` Runs environment subgraph nodes used config.local.json
 
 ```npm run nodes:stop``` Stop environment subgraph nodes
+
+```npm run nodes:restart``` Restart subgraph nodes.
