@@ -32,7 +32,9 @@
       "nodes": [
         {
           "rpc": "http://144.126.244.6:8545",
-          "features": []
+          "features": [
+            "archive"
+          ]
         }
       ]
     },
