@@ -8,21 +8,21 @@ pool_size = 10
 
 [chains]
 ingestor = "{{prefix defaultIndexedNode}}"
-{{#each indexedNodes as | node |}}
-[chains.{{node.name}}]
+{{#each indexedNodes as | indexedNode |}}
+[chains.{{indexedNode.name}}]
 shard = "primary"
 provider = [
-    {{#each node.rpc}}
-    { label = "{{node.name}}-{{@index}}", url = "{{this}}", features = ["archive"] },
+    {{#each indexedNode.nodes as | node |}}
+    { label = "{{indexedNode.name}}-{{@index}}", url = "{{node.rpc}}", features = {{#if node.features}}{{{jsonStringify node.features}}}{{else}}[]{{/if}} },
     {{/each}}
 ]
 {{/each}}
 
 [deployment]
-{{#each indexedNodes as | node |}}
+{{#each indexedNodes as | indexedNode |}}
 [[deployment.rule]]
-match = { network = "{{node.name}}" }
-indexers = ["{{prefix node.name}}"]
+match = { network = "{{indexedNode.name}}" }
+indexers = ["{{prefix indexedNode.name}}"]
 {{/each}}
 [[deployment.rule]]
 indexers = ["{{prefix defaultIndexedNode}}"]

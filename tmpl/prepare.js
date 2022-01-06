@@ -46,5 +46,9 @@ handlebars.registerHelper('metricPort', function () {
   return `9${'0'.repeat(3-portNumber.length)}${portNumber}`;
 });
 
+handlebars.registerHelper('jsonStringify', function (jsonObj) {
+  return JSON.stringify(jsonObj);
+});
+
 fs.writeFileSync(path.resolve(`${__dirname}/../docker-compose.yml`), handlebars.compile(dockerComposeTmpl)(config));
 fs.writeFileSync(path.resolve(`${__dirname}/../nodes-conf/config.toml`), handlebars.compile(nodesConfigTmpl)(config));

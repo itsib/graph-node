@@ -7,7 +7,14 @@
   "indexedNodes": [
     {
       "name": "kovan",
-      "rpc": ["https://kovan.infura.io/v3/a4ceed48e86948ab835e6512025ddad4"]
+      "nodes": [
+        {
+          "rpc": "https://kovan.infura.io/v3/a4ceed48e86948ab835e6512025ddad4",
+          "features": [
+            "archive"
+          ]
+        }
+      ]
     }
   ]
 }
