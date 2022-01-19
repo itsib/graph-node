@@ -31,7 +31,7 @@
       "name": "bsc",
       "nodes": [
         {
-          "rpc": "http://144.126.244.6:8545",
+          "rpc": "https://speedy-nodes-nyc.moralis.io/b4a6528d194223b7cddbea48/bsc/mainnet/archive",
           "features": [
             "archive"
           ]
