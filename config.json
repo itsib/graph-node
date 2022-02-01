@@ -31,6 +31,12 @@
       "name": "bsc",
       "nodes": [
         {
+          "rpc": "https://speedy-nodes-nyc.moralis.io/b4a6528d194223b7cddbea48/bsc/mainnet/archive",
+          "features": [
+            "archive"
+          ]
+        },
+        {
           "rpc": "https://speedy-nodes-nyc.moralis.io/2f90ec2d8b77daa7c80e98f7/bsc/mainnet/archive",
           "features": [
             "archive"
