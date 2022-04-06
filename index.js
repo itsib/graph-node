@@ -18,7 +18,7 @@ const PUBLIC_RPC = {
   rinkeby: 'https://rinkeby-light.eth.linkpool.io',
   goerli: 'https://goerli-light.eth.linkpool.io',
   kovan: 'https://kovan.infura.io/v3/a4ceed48e86948ab835e6512025ddad4',
-  matic: 'https://rpc-mainnet.matic.network',
+  matic: 'https://rpc-mainnet.maticvigil.com',
   bsc: 'https://bsc-dataseed.binance.org',
 };
 
