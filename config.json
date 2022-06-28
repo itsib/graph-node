@@ -31,30 +31,7 @@
       "name": "bsc",
       "nodes": [
         {
-          "rpc": "https://speedy-nodes-nyc.moralis.io/b4a6528d194223b7cddbea48/bsc/mainnet/archive",
-          "features": [
-            "archive"
-          ]
-        },
-        {
-          "rpc": "https://speedy-nodes-nyc.moralis.io/2f90ec2d8b77daa7c80e98f7/bsc/mainnet/archive",
-          "features": [
-            "archive"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "kovan",
-      "nodes": [
-        {
-          "rpc": "https://kovan.infura.io/v3/a4ceed48e86948ab835e6512025ddad4",
-          "features": [
-            "archive"
-          ]
-        },
-        {
-          "rpc": "https://kovan.infura.io/v3/fe327559be4c41b18d313acd242834a8",
+          "rpc": "http://176.9.50.84:8545",
           "features": [
             "archive"
           ]
