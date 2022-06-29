@@ -20,7 +20,7 @@
       "name": "matic",
       "nodes": [
         {
-          "rpc": "http://174.138.102.169:8545",
+          "rpc": "https://speedy-nodes-nyc.moralis.io/2f90ec2d8b77daa7c80e98f7/polygon/mainnet/archive",
           "features": [
             "archive"
           ]
