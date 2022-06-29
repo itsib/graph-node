@@ -37,6 +37,17 @@
           ]
         }
       ]
+    },
+    {
+      "name": "ropsten",
+      "nodes": [
+        {
+          "rpc": "https://ropsten.infura.io/v3/a4ceed48e86948ab835e6512025ddad4",
+          "features": [
+            "archive"
+          ]
+        }
+      ]
     }
   ]
 }
